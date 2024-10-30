@@ -14,8 +14,9 @@ class CommentSeeder extends Seeder
     public function run(): void
     {
         DB::table('comments')->insert([
-            ['article_id' => 1, 'message' => 'Great article!', 'user_id' => 1],
-            // Ajoute d'autres commentaires avec un `user_id` valide
+            ['message' => 'Great article!', 'article_id' => 1, 'user_id' => 1],
+            ['message' => 'I agree with you.', 'article_id' => 1, 'user_id' => 1],
+            // Ajoute d'autres commentaires ici si besoin
         ]);
     }
 }

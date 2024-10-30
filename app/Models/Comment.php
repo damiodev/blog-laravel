@@ -5,13 +5,17 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Article extends Model
+class Comment extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['title', 'message', 'user_id'];
+    protected $fillable = ['content', 'article_id', 'user_id'];
 
-    // Définition de la relation avec User
+    public function article()
+    {
+        return $this->belongsTo(Article::class);
+    }
+
     public function user()
     {
         return $this->belongsTo(User::class);

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Article;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
 
 class BlogController extends Controller
 {
@@ -42,7 +43,7 @@ class BlogController extends Controller
         $article = Article::create([
             'title' => $request->title,
             'message' => $request->message,
-            'user_id' => \Illuminate\Support\Facades\Auth::user()->id,
+            'user_id' => Auth::user()->id, // Utilise Auth pour récupérer l'utilisateur connecté
         ]);
     
         // Log l'article créé
@@ -55,18 +56,30 @@ class BlogController extends Controller
     public function edit($id)
     {
         $article = Article::findOrFail($id);
+
+        // Vérifie si l'utilisateur authentifié est l'auteur de l'article
+        if (Auth::user()->id !== $article->user_id) {
+            return redirect()->route('blog.index')->with('error', 'Vous n\'êtes pas autorisé à éditer cet article.');
+        }
+
         return view('blog.edit', compact('article'));
     }
 
     // Mettre à jour un article
     public function update(Request $request, $id)
     {
+        $article = Article::findOrFail($id);
+
+        // Vérifie si l'utilisateur authentifié est l'auteur de l'article
+        if (Auth::user()->id !== $article->user_id) {
+            return redirect()->route('blog.index')->with('error', 'Vous n\'êtes pas autorisé à mettre à jour cet article.');
+        }
+
         $request->validate([
             'title' => 'required|string|max:255',
             'message' => 'required|string',
         ]);
 
-        $article = Article::findOrFail($id);
         $article->update([
             'title' => $request->title,
             'message' => $request->message,
@@ -79,6 +92,12 @@ class BlogController extends Controller
     public function destroy($id)
     {
         $article = Article::findOrFail($id);
+
+        // Vérifie si l'utilisateur authentifié est l'auteur de l'article
+        if (Auth::user()->id !== $article->user_id) {
+            return redirect()->route('blog.index')->with('error', 'Vous n\'êtes pas autorisé à supprimer cet article.');
+        }
+
         $article->delete();
 
         return redirect()->route('blog.index')->with('success', 'Article supprimé avec succès.');
