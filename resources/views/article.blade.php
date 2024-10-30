@@ -7,7 +7,7 @@
 </head>
 <body>
     <h1>{{ $article->title }}</h1>
-    <p>{{ $article->content }}</p>
+    <p>{{ $article->message }}</p>
     <a href="{{ route('blog') }}">Retour à la liste des articles</a>
 </body>
 </html>
