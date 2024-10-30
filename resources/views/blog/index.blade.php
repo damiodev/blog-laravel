@@ -1,19 +1,19 @@
 @extends('layouts.app')
 
 @section('message')
+<div class="container">
     <h1>Liste des articles</h1>
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Titre</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach ($articles as $article)
-                <tr>
-                    <td>{{ $article->title }}</td>
-                    <td>
+    <div class="row">
+        @foreach ($articles as $article)
+            <div class="col-md-4 mb-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ $article->title }}</h5>
+                        <p class="card-text">{{ Str::limit($article->message, 100) }}</p>
+                        <p class="text-muted">
+                            Créé le {{ $article->created_at->format('d/m/Y H:i') }} 
+                            par {{ $article->user ? $article->user->name : 'Inconnu' }}
+                        </p>
                         <a href="{{ route('blog.show', $article->id) }}" class="btn btn-info">Voir</a>
                         <a href="{{ route('blog.edit', $article->id) }}" class="btn btn-warning">Éditer</a>
                         <form action="{{ route('blog.destroy', $article->id) }}" method="POST" style="display:inline;">
@@ -21,9 +21,10 @@
                             @method('DELETE')
                             <button type="submit" class="btn btn-danger">Supprimer</button>
                         </form>
-                    </td>
-                </tr>
-            @endforeach
-        </tbody>
-    </table>
+                    </div>
+                </div>
+            </div>
+        @endforeach
+    </div>
+</div>
 @endsection

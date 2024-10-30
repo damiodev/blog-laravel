@@ -11,7 +11,7 @@ class BlogController extends Controller
     // Afficher tous les articles
     public function index()
     {
-        $articles = Article::all();
+        $articles = Article::with('user')->get(); // Charge les utilisateurs en même temps
         return view('blog.index', compact('articles'));
     }
 

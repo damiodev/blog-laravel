@@ -11,6 +11,19 @@
             <li class="nav-item">
                 <a class="nav-link" href="{{ route('blog.create') }}">Créer un article</a>
             </li>
+            <li>
+                @if(Auth::check())
+                    <span class="navbar-text me-3">
+                        {{ Auth::user()->name }}
+                    </span>
+                    <form action="{{ route('logout') }}" method="POST" style="display:inline;">
+                        @csrf
+                        <button type="submit" class="btn btn-danger">Déconnexion</button>
+                    </form>
+                @else
+                    <a href="{{ route('login') }}" class="btn btn-primary">Connexion</a>
+                @endif
+            </li>
         </ul>
     </div>
 </nav>
