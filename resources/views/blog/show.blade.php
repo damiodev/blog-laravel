@@ -21,20 +21,24 @@
             <div class="card mb-2">
                 <div class="card-body">
                     <strong>{{ $comment->user->name }}:</strong>
-                    <p>{{ $comment->content }}</p>
+                    <p>{{ $comment->message }}</p>
                 </div>
             </div>
         @endforeach
     </div>
 
-    <h4>Ajouter un commentaire</h4>
-    <form action="{{ route('comments.store', $article->id) }}" method="POST">
-        @csrf
-        <div class="form-group">
-            <textarea class="form-control" name="content" required></textarea>
-        </div>
-        <button type="submit" class="btn btn-primary">Commenter</button>
-    </form>
+    @if(Auth::check())
+        <h4>Ajouter un commentaire</h4>
+        <form action="{{ route('comments.store', $article->id) }}" method="POST">
+            @csrf
+            <div class="form-group">
+                <textarea class="form-control" name="content" required></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Commenter</button>
+        </form>
+    @else
+        <p class="text-danger">Vous devez être connecté pour ajouter un commentaire.</p>
+    @endif
 
     <a href="{{ route('blog.index') }}" class="btn btn-secondary">Retour à la liste</a>
 </div>

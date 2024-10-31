@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Faker\Factory as Faker;
 
 class UserSeeder extends Seeder
 {
@@ -22,15 +23,20 @@ class UserSeeder extends Seeder
         // Réactiver les vérifications de clé étrangère
         DB::statement('SET FOREIGN_KEY_CHECKS=1;');
 
-        DB::table('users')->insert([
-            [
-                'name' => 'Test User',
-                'email' => 'test@example.com',
-                'password' => bcrypt('password'),
-                'role_id' => 1,
+        $faker = Faker::create();
+        $users = [];
+
+        for ($i = 1; $i <= 10; $i++) {
+            $users[] = [
+                'name' => $faker->name, // Nom aléatoire
+                'email' => $faker->unique()->safeEmail, // Email unique
+                'password' => bcrypt('password'), // Mot de passe
+                'role_id' => rand(1, 3), // Changez 3 par le nombre de rôles dans votre table roles
                 'created_at' => now(),
                 'updated_at' => now(),
-            ],
-        ]);
+            ];
+        }
+
+        DB::table('users')->insert($users);
     }
 }
